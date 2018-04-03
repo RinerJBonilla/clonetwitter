@@ -5,47 +5,42 @@ import TweetForm from './TweetForm';
 import update from 'immutability-helper'
 
 export default class TweetFeed extends Component{
-    constructor(props){
-        super(props)
+    constructor(){
+        super();
         this.state = {
             tweets: []
-        }
+        };
+        this.onSubmit = this.onSubmit.bind(this);
     }
-
-    onSubmit = (tweet) =>{
-        axios.post('http://localhost:3001/tweets', tweet )
-        .then(response =>{
-          const tweets = update(this.state.tweets, { $splice: [[0, 0, response.data]]})
-          this.setState({tweets: tweets})
-          })
-          .catch(error =>
-            {
-              console.error(error);
-            })
-    }
-
+    
     componentDidMount(){
-        axios.get('http://localhost:3001/tweets.json')
+        axios.get('https://examen2backendz.herokuapp.com/tweets.json')
         .then(response => {
             this.setState({tweets: response.data})
         })
         .catch(error => console.log(error))
     }
 
+    onSubmit(tweet) {
+        //tweet.id = this.state.tweets.length + 1;
+        const tweets = update(this.state.tweets, {
+            $splice: [[0, 0, tweet]]
+        })
+        this.setState({
+            tweets: tweets
+        })
+    }
+
     render () {
         return(
           <div>
-          <div>
-            <TweetForm/>
-          </div>
-          <div>
+            <TweetForm onSubmit={this.onSubmit}/>
                 {
                     this.state.tweets.map((tweet)=>(
                         <Tweet key={tweet.id} tweet={tweet}/>
                     ))
                 }
-          </div>
-          </div>
+            </div>    
         )
     }
 }

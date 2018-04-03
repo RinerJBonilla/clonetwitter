@@ -18,8 +18,26 @@
   font-size: 1.5em;
 }
 
+.userer {
+  color: blue;
+}
+
+.times {
+  color: lightgray;
+}
+
 .App-intro {
   font-size: large;
+}
+
+.tile {
+  height: 150px;
+  width: 250px;
+  margin: 10px;
+  background: lavender;
+  float: left;
+  font-size: 11px;
+  text-align: center;
 }
 
 @keyframes App-logo-spin {

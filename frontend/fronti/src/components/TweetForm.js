@@ -5,13 +5,13 @@ class TweetForm extends Component{
     constructor(props){
         super(props);
         this.state = {
-            user: props.tweet ? props.tweet.user: '',
-            tweet: props.tweet ? props.tweet.tweet: ''
+            user: '',
+            tweet: ''
         };
 
-        //this.onChangeUser = this.onChangeUser.bind(this);
-        //this.onChangeTweet= this.onChangeTweet.bind(this);
-        //this.onSubmit = this.onSubmit.bind(this);
+        this.onChangeUser = this.onChangeUser.bind(this);
+        this.onChangeTweet= this.onChangeTweet.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
 
@@ -25,11 +25,19 @@ class TweetForm extends Component{
         this.setState({tweet});
     }
 
-    onSubmit =(e)=>{
+    onSubmit (e){
         e.preventDefault();
-        const tweet = {user: this.state.user,tweet: this.state.tweet};
-        this.props.onSubmit(tweet);
-    };
+
+        axios.post('https://examen2backendz.herokuapp.com/tweets', this.state )
+        .then(response =>{
+            this.setState({ user: '', tweet: '' });
+            this.props.onState(response.data.tweet);
+          })
+          .catch(error =>
+            {
+              console.error(error);
+            });
+    }
 
     render(){
         return (
@@ -37,7 +45,7 @@ class TweetForm extends Component{
                 <input
                   type="text"
                   name="user"
-                  placeholder="by User"
+                  placeholder="@User"
                   onChange={this.onChangeUser}
                   value={this.state.user}
                 />
